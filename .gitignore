@@ -1,0 +1,73 @@
+# .NET Core specific
+bin/
+obj/
+out/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE - VS Code
+.vscode/
+
+# IDE - Rider
+.idea/
+*.sln.iml
+
+# IDE - Visual Studio
+.vs/
+*.csproj.user
+*.cache
+*.csproj.docstates
+*.dbmdl
+*.jfm
+*.tlog
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+*.v11.suo
+*.userprefs
+
+# Tool-specific files
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# NuGet
+packages/
+*.nupkg
+*.nuspec
+
+# ReSharper
+*_ReSharper.*/
+*ReSharper*/
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+
+# MightyMoose
+autoTest.net/
+
+# Web publish
+*.Publish.xml
+*.pubxml
+*.pubxml.user
+
+# Others
+node_modules/
+bower_components/
