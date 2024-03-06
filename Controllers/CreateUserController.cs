@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bank_API.Controllers
+namespace WalletApi.Controllers
 {
     [Route("api/v1/users")]
     [ApiController]
     public class CreateUserController : ControllerBase
     {
-        [HttpGet("")]
+        [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public string GetUser()
