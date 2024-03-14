@@ -29,7 +29,7 @@ namespace WalletApi.Controllers
 
 
 
-        //create user
+        //create user endpoint
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
