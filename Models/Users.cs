@@ -28,9 +28,9 @@ namespace WalletApi.Models
 
         public string? UserStatus { get; set; }
         
-        [JsonIgnore] //to avoid in request payload
+        //[JsonIgnore] //to avoid in request payload
         public DateTimeOffset? CreatedAt { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public DateTimeOffset? UpdatedAt { get; set; }
 
         public string? SignInStatus { get; set; }
