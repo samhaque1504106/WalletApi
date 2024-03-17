@@ -66,11 +66,11 @@ namespace WalletApi.Controllers
         }
         
         
-        //get users with pagination
-        [HttpGet("GetAll_Pagination")]
+        //get users with filtering & pagination
+        [HttpGet("GetAll_Filtering_Pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetUsers([FromQuery] string cursor = "")
+        public IActionResult GetUsers([FromQuery] string cursor = "",[FromQuery] string filter = "")
         {
             /*pagination:
              * 1. Retrieve query parameters(cursor) from request url
@@ -81,9 +81,15 @@ namespace WalletApi.Controllers
              *                                  again query.
              *                                  calculate same 1. start cursor 2. end cursor 3. has_next_page
              */
+            
+            /* filtering:
+             *  1. Retrieve query parameters(filter) from request url (Note: filtering applied on UserName)
+             *  2. Is filter empty? -> If Yes -> Apply no filter
+             *  3. Is filter empty? -> If No -> then use like search
+             */
 
             
-            // getting cursored data
+            // getting filtered and cursored data
             int CurrentCursor = 0;
             int limit = 20;
             var users = new List<Users>();
@@ -92,12 +98,13 @@ namespace WalletApi.Controllers
                 CurrentCursor = GivenCursor;
             }
             
-            var parameters = new[]
+            var parameter = new[]
             {
                 new SqlParameter("@cursor", CurrentCursor),
-                new SqlParameter("@limit", limit)
+                new SqlParameter("@limit", limit),
+                new SqlParameter("@filter",filter)
             };
-            users = _db.Users.FromSqlRaw("EXEC WA_SP_GetUserCursored @cursor, @limit", parameters).ToList();
+            users = _db.Users.FromSqlRaw("EXEC WA_SP_GetUserCursored @cursor, @limit, @filter", parameter).ToList();
             
             //getting start_cursor, end_cursor, has_next_page,
             string connectionString = _configuration.GetConnectionString("DefaultConnectionStrings");
@@ -113,13 +120,14 @@ namespace WalletApi.Controllers
                 {
                     connection.Open();
                     using (var command = new SqlCommand("WA_SP_HasNextPage", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter("@EndCursor", SqlDbType.BigInt) { Value = lastUserId });
-
-                        // SP_HasNextPage returns a bit (0 or 1) indicating if there is a next page
-                        hasNextPage = (bool)command.ExecuteScalar();
-                    }
+                     {
+                         command.CommandType = CommandType.StoredProcedure;
+                         command.Parameters.Add(new SqlParameter("@EndCursor", SqlDbType.BigInt){ Value = lastUserId});
+                         command.Parameters.Add(new SqlParameter("@filter", SqlDbType.VarChar){ Value = filter});
+                         
+                         // SP_HasNextPage returns a bit (0 or 1) indicating if there is a next page
+                         hasNextPage = (bool)command.ExecuteScalar();
+                     }
                 }
             }
 
